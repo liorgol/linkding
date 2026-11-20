@@ -51,7 +51,7 @@ RUN wget https://www.sqlite.org/${SQLITE_RELEASE_YEAR}/sqlite-amalgamation-${SQL
     gcc -fPIC -shared icu.c `pkg-config --libs --cflags icu-uc icu-io` -o libicu.so
 
 
-FROM python:3.12.9-slim-bookworm AS linkding
+FROM python:3.12.16-slim-bookworm AS linkding
 LABEL org.opencontainers.image.source="https://github.com/sissbruecker/linkding"
 # install runtime dependencies
 RUN apt-get update && apt-get -y install mime-support libpq-dev libicu-dev libssl3 curl
