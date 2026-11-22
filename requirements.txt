@@ -6,15 +6,15 @@
 #
 asgiref==3.8.1
     # via django
-beautifulsoup4==4.12.3
+beautifulsoup4==4.13.4
     # via -r requirements.in
 bleach==6.1.0
     # via -r requirements.in
 bleach-allowlist==1.0.3
     # via -r requirements.in
-certifi==2024.8.30
+certifi==2026.10.18
     # via requests
-cffi==1.17.1
+cffi==2.0.0
     # via cryptography
 charset-normalizer==3.3.2
     # via requests
@@ -22,12 +22,12 @@ click==8.1.7
     # via waybackpy
 confusable-homoglyphs==3.3.1
     # via django-registration
-cryptography==43.0.1
+cryptography==50.0.0
     # via
     #   josepy
     #   mozilla-django-oidc
     #   pyopenssl
-django==5.2.3
+django==5.2.17
     # via
     #   -r requirements.in
     #   django-registration
@@ -37,13 +37,13 @@ django-registration==3.4
     # via -r requirements.in
 django-widget-tweaks==1.5.0
     # via -r requirements.in
-djangorestframework==3.15.2
+djangorestframework==3.18.2
     # via -r requirements.in
 huey==2.5.1
     # via -r requirements.in
 idna==3.10
     # via requests
-josepy==1.14.0
+josepy==2.0.0
     # via mozilla-django-oidc
 markdown==3.7
     # via -r requirements.in
@@ -53,7 +53,7 @@ psycopg2-binary==2.9.9
     # via -r requirements.in
 pycparser==2.22
     # via cffi
-pyopenssl==24.2.1
+pyopenssl==26.4.0
     # via josepy
 python-dateutil==2.9.0.post0
     # via -r requirements.in
@@ -66,13 +66,13 @@ six==1.16.0
     # via
     #   bleach
     #   python-dateutil
-soupsieve==2.6
+soupsieve==4.0
     # via beautifulsoup4
-sqlparse==0.5.1
+sqlparse==0.6.0
     # via django
 supervisor==4.2.5
     # via -r requirements.in
-urllib3==2.5.0
+urllib3==2.8.0
     # via
     #   requests
     #   waybackpy

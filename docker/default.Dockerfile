@@ -51,7 +51,7 @@ RUN wget https://www.sqlite.org/${SQLITE_RELEASE_YEAR}/sqlite-amalgamation-${SQL
     gcc -fPIC -shared icu.c `pkg-config --libs --cflags icu-uc icu-io` -o libicu.so
 
 
-FROM python:3.12.9-slim-bookworm AS linkding
+FROM python:3.12.16-slim-bookworm AS linkding
 LABEL org.opencontainers.image.source="https://github.com/sissbruecker/linkding"
 # install runtime dependencies
 RUN apt-get update && apt-get -y install mime-support libpq-dev libicu-dev libssl3 curl
@@ -83,6 +83,10 @@ HEALTHCHECK --interval=30s --retries=3 --timeout=1s \
 CMD curl -f http://localhost:${LD_SERVER_PORT:-9090}/${LD_CONTEXT_PATH}health || exit 1
 
 CMD ["./bootstrap.sh"]
+# Added by CVE Remediator: security updates for packages the image ships
+USER root
+RUN apt-get update && apt-get install -y --no-install-recommends --only-upgrade apt gpgv libapt-pkg6.0 libcap2 libgnutls30 libgssapi-krb5-2 libk5crypto3 libkrb5-3 libkrb5support0 libpcre2-8-0 libsqlite3-0 && rm -rf /var/lib/apt/lists/*
+RUN for init in $(find / -xdev -path '*/site-packages/setuptools/__init__.py' 2>/dev/null); do root="${init%/lib/python*}"; py=$(ls "$root"/bin/python3* 2>/dev/null | head -n 1); if [ -n "$py" ] && "$py" -m pip --version >/dev/null 2>&1; then "$py" -m pip install --no-cache-dir --upgrade setuptools; fi; done
 
 
 FROM node:18-alpine AS ublock-build
