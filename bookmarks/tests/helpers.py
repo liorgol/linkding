@@ -295,9 +295,16 @@ class BookmarkListTestMixin(TestCase, HtmlTestMixin):
         self, response, bookmarks: List[Bookmark], link_target: str = "_blank"
     ):
         soup = self.make_soup(response.content.decode())
-        bookmark_list = soup.select_one(
-            f'ul.bookmark-list[data-bookmarks-total="{len(bookmarks)}"]'
-        )
+        list_selector = f'ul.bookmark-list[data-bookmarks-total="{len(bookmarks)}"]'
+        bookmark_list = soup.select_one(list_selector)
+        if bookmark_list is None:
+            # Turbo stream responses wrap content in <template> elements, whose
+            # contents are not matched by selectors. Search the template contents.
+            for template in soup.find_all("template"):
+                template_soup = self.make_soup(template.decode_contents())
+                bookmark_list = template_soup.select_one(list_selector)
+                if bookmark_list is not None:
+                    break
         self.assertIsNotNone(bookmark_list)
 
         bookmark_items = bookmark_list.select("li[ld-bookmark-item]")
@@ -325,6 +332,14 @@ class TagCloudTestMixin(TestCase, HtmlTestMixin):
     def assertVisibleTags(self, response, tags: List[Tag]):
         soup = self.make_soup(response.content.decode())
         tag_cloud = soup.select_one("div.tag-cloud")
+        if tag_cloud is None:
+            # Turbo stream responses wrap content in <template> elements, whose
+            # contents are not matched by selectors. Search the template contents.
+            for template in soup.find_all("template"):
+                template_soup = self.make_soup(template.decode_contents())
+                tag_cloud = template_soup.select_one("div.tag-cloud")
+                if tag_cloud is not None:
+                    break
         self.assertIsNotNone(tag_cloud)
 
         tag_items = tag_cloud.select("a[data-is-tag-item]")
